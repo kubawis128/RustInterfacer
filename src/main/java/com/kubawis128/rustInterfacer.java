@@ -16,6 +16,18 @@ public final class rustInterfacer extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            try {
+                Socket socket = new Socket("127.0.0.1", 2140);
+                OutputStream output = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(output, true);
+                writer.println(Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers());
+                writer.close();
+                socket.close();
+            }catch (Exception e){
+                // A tam
+            }
+        },0,6000);
         Thread thread = new Thread(() -> {
             try {
                 ServerSocket serverSocket = new ServerSocket(2138);
@@ -25,7 +37,7 @@ public final class rustInterfacer extends JavaPlugin {
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     String line = in.readLine();
                     // Tu z "Discord>" zmienic na np "@KubaWis#7288>"
-                    JsonObject incoming = new JsonParser().parse(line).getAsJsonObject();;
+                    JsonObject incoming = new JsonParser().parse(line).getAsJsonObject();
                     String content = incoming.get("content").getAsString();
                     if(!content.isEmpty()){
                         Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "@" + incoming.get("author").getAsString() + "> "  + ChatColor.RESET + content);
