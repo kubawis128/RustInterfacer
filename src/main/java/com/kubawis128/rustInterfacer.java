@@ -1,5 +1,7 @@
 package com.kubawis128;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,14 +17,18 @@ public final class rustInterfacer extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
         Thread thread = new Thread(() -> {
             try {
-                ServerSocket serverSocket = new ServerSocket(7879);
+                ServerSocket serverSocket = new ServerSocket(2138);
                 while (true) {
                     Socket clientSocket = serverSocket.accept();
                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     String line = in.readLine();
                     // Tu z "Discord>" zmienic na np "@KubaWis#7288>"
-                    Bukkit.broadcastMessage("Discord> " + line);
+                    JsonObject incoming = new JsonParser().parse(line).getAsJsonObject();;
+                    String content = incoming.get("content").getAsString();
+                    if(!content.isEmpty()){
+                        Bukkit.broadcastMessage("@" + incoming.get("author").getAsString() + "> " + content);
+                    }
                 }
             } catch (IOException e) {
             }
