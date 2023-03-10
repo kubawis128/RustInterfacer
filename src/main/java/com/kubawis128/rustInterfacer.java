@@ -3,6 +3,7 @@ package com.kubawis128;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -27,7 +28,7 @@ public final class rustInterfacer extends JavaPlugin {
                     JsonObject incoming = new JsonParser().parse(line).getAsJsonObject();;
                     String content = incoming.get("content").getAsString();
                     if(!content.isEmpty()){
-                        Bukkit.broadcastMessage("@" + incoming.get("author").getAsString() + "> " + content);
+                        Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "@" + incoming.get("author").getAsString() + "> "  + ChatColor.RESET + content);
                     }
                 }
             } catch (IOException e) {
