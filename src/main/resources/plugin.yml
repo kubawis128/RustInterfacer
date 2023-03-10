@@ -1,0 +1,4 @@
+name: RustInterfacer
+version: '${project.version}'
+main: com.kubawis128.rustInterfacer
+api-version: 1.19
