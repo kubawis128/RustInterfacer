@@ -18,7 +18,7 @@ public final class rustInterfacer extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             try {
-                Socket socket = new Socket("127.0.0.1", 2140);
+                Socket socket = new Socket("192.168.1.201", 2140);
                 OutputStream output = socket.getOutputStream();
                 PrintWriter writer = new PrintWriter(output, true);
                 writer.println(Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers());

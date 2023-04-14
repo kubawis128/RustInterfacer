@@ -14,10 +14,10 @@ public class EventListener implements Listener {
     @EventHandler
     public void chatMessage(AsyncPlayerChatEvent event){
         try {
-            Socket socket = new Socket("127.0.0.1", 2139);
+            Socket socket = new Socket("192.168.1.201", 2139);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
-            writer.println("{\"type_of_event\":\"chat\",\"player\":\"" + event.getPlayer().getName() + "\",\"content\":\"" + event.getMessage() + "\"}");
+            writer.println("{\"type_of_event\":\"chat\",\"player\":\"" + event.getPlayer().getName().replace("\"", "\\\"") + "\",\"content\":\"" + event.getMessage().replace("\"", "\\\"") + "\"}");
             writer.close();
             socket.close();
         }catch (Exception e){
@@ -28,17 +28,17 @@ public class EventListener implements Listener {
     @EventHandler
     public void joinMessage(PlayerJoinEvent event){
         try {
-            Socket socket = new Socket("127.0.0.1", 2139);
+            Socket socket = new Socket("192.168.1.201", 2139);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
-            writer.println("{\"type_of_event\":\"join\",\"player\":\""+ event.getPlayer().getName() +"\"}");
+            writer.println("{\"type_of_event\":\"join\",\"player\":\""+ event.getPlayer().getName().replace("\"", "\\\"") +"\"}");
             writer.close();
             socket.close();
         }catch (Exception e){
             // Zjebało sie
         }
         try {
-            Socket socket = new Socket("127.0.0.1", 2140);
+            Socket socket = new Socket("192.168.1.201", 2140);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
             writer.println(Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers());
@@ -52,17 +52,17 @@ public class EventListener implements Listener {
     @EventHandler
     public void leaveMessage(PlayerQuitEvent event){
         try {
-            Socket socket = new Socket("127.0.0.1", 2139);
+            Socket socket = new Socket("192.168.1.201", 2139);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
-            writer.println("{\"type_of_event\":\"leave\",\"player\":\""+ event.getPlayer().getName() +"\"}");
+            writer.println("{\"type_of_event\":\"leave\",\"player\":\""+ event.getPlayer().getName().replace("\"", "\\\"") +"\"}");
             writer.close();
             socket.close();
         }catch (Exception e){
             // Zjebało sie
         }
         try {
-            Socket socket = new Socket("127.0.0.1", 2140);
+            Socket socket = new Socket("192.168.1.201", 2140);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
             writer.println(Bukkit.getOnlinePlayers().size()-1 + "/" + Bukkit.getServer().getMaxPlayers());
@@ -76,10 +76,10 @@ public class EventListener implements Listener {
     @EventHandler
     public void deathMessage(PlayerDeathEvent event){
         try {
-            Socket socket = new Socket("127.0.0.1", 2139);
+            Socket socket = new Socket("192.168.1.201", 2139);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
-            writer.println("{\"type_of_event\":\"death\",\"player\":\""+ event.getPlayer().getName() +"\",\"content\":\"" + event.getDeathMessage() +"\"}");
+            writer.println("{\"type_of_event\":\"death\",\"player\":\""+ event.getPlayer().getName().replace("\"", "\\\"") +"\",\"content\":\"" + event.getDeathMessage().replace("\"", "\\\"") +"\"}");
             writer.close();
             socket.close();
         }catch (Exception e){
@@ -90,10 +90,13 @@ public class EventListener implements Listener {
     @EventHandler
     public void playerCommand(PlayerCommandPreprocessEvent event){
         try {
-            Socket socket = new Socket("127.0.0.1", 2139);
+            if(event.getMessage().contains("/login") || event.getMessage().contains("/register") ){
+                return;
+            }
+            Socket socket = new Socket("192.168.1.201", 2139);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
-            writer.println("{\"type_of_event\":\"command\",\"player\":\""+ event.getPlayer().getName() +"\",\"content\":\"" + event.getMessage() +"\"}");
+            writer.println("{\"type_of_event\":\"command\",\"player\":\""+ event.getPlayer().getName().replace("\"", "\\\"") +"\",\"content\":\"" + event.getMessage().replace("\"", "\\\"") +"\"}");
             writer.close();
             socket.close();
         }catch (Exception e){
