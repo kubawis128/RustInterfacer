@@ -15,6 +15,17 @@ public final class rustInterfacer extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        try {
+            Socket socket = new Socket("192.168.1.201", 2139);
+            OutputStream output = socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(output, true);
+            writer.println("{\"type_of_event\":\"turn_on\"}");
+            writer.close();
+            socket.close();
+        }catch (Exception e){
+            // Zjebało sie
+        }
+
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             try {
@@ -37,6 +48,7 @@ public final class rustInterfacer extends JavaPlugin {
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     String line = in.readLine();
                     // Tu z "Discord>" zmienic na np "@KubaWis#7288>"
+                    System.out.println("Getting: " + line);
                     JsonObject incoming = new JsonParser().parse(line).getAsJsonObject();
                     String content = incoming.get("content").getAsString();
                     if(!content.isEmpty()){
@@ -44,6 +56,7 @@ public final class rustInterfacer extends JavaPlugin {
                     }
                 }
             } catch (IOException e) {
+                System.out.println("Something went wrong: " + e);
             }
         });
         thread.start();
